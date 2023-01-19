@@ -9,7 +9,7 @@ class ScoreContributionSpecification:
     This class specifies which top-x to consider and what the corresponding weights are.
     """
 
-    def __init__(self, contributions: List[Tuple[int, float]]) -> None:
+    def __init__(self, contributions:  List[ Tuple[int, float]]) -> None:
         """
         Args:
             contributions: List of tuples (top_count, weight) for the score contributions
@@ -17,11 +17,11 @@ class ScoreContributionSpecification:
         self.contributions = contributions
 
     @property
-    def top_counts(self) -> List[int]:
+    def top_counts(self) ->  List[int]:
         return [x[0] for x in self.contributions]
 
     @property
-    def weights(self) -> List[float]:
+    def weights(self) ->  List[float]:
         return [x[1] for x in self.contributions]
 
 
@@ -37,7 +37,7 @@ def uniform_specification(*top_counts: int) -> ScoreContributionSpecification:
 
 
 def compute_global_score(contribution_specification: ScoreContributionSpecification,
-                         scores: List[float]) -> Tuple[float, Dict[str, float]]:
+                         scores:  List[float]) ->  Tuple[float, Dict[str, float]]:
     """
     Computes the global score according to the contribution specification.
 
@@ -55,7 +55,7 @@ def compute_global_score(contribution_specification: ScoreContributionSpecificat
 
     for top_count, weight in contribution_specification.contributions:
         score = sum(sorted_scores[:top_count]) / top_count
-        top_x_dict[f'top_{top_count}'] = score
+        top_x_Dict[f'top_{top_count}'] = score
         global_score += score * weight
 
     global_score /= sum(contribution_specification.weights)

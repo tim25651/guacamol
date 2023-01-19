@@ -24,7 +24,7 @@ class FrechetBenchmark(DistributionLearningBenchmark):
     See http://dx.doi.org/10.1021/acs.jcim.8b00234 for the publication.
     """
 
-    def __init__(self, training_set: List[str],
+    def __init__(self, training_set:  List[str],
                  chemnet_model_filename='ChemNet_v0.13_pretrained.h5',
                  sample_size=10000) -> None:
         """
@@ -91,7 +91,7 @@ class FrechetBenchmark(DistributionLearningBenchmark):
 
         return fcd.load_ref_model(model_path)
 
-    def _calculate_distribution_statistics(self, model, molecules: List[str]):
+    def _calculate_distribution_statistics(self, model, molecules:  List[str]):
         sample_std = fcd.canonical_smiles(molecules)
         gen_mol_act = fcd.get_predictions(model, sample_std)
 

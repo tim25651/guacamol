@@ -30,7 +30,7 @@ def remove_duplicates(list_with_duplicates):
     return unique_list
 
 
-def get_random_subset(dataset: List[Any], subset_size: int, seed: Optional[int] = None) -> List[Any]:
+def get_random_subset(dataset:  List[Any], subset_size: int, seed: Optional[int] = None) ->  List[Any]:
     """
     Get a random subset of some dataset.
 

@@ -63,8 +63,8 @@ def _assess_distribution_learning(model: DistributionMatchingGenerator,
 
 
 def _evaluate_distribution_learning_benchmarks(model: DistributionMatchingGenerator,
-                                               benchmarks: List[DistributionLearningBenchmark]
-                                               ) -> List[DistributionLearningBenchmarkResult]:
+                                               benchmarks:  List[DistributionLearningBenchmark]
+                                               ) ->  List[DistributionLearningBenchmarkResult]:
     """
     Evaluate a model with the given benchmarks.
     Should not be called directly except for testing purposes.

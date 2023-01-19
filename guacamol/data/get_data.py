@@ -85,7 +85,7 @@ class AllowedSmilesCharDictionary(object):
         return True
 
 
-def get_raw_smiles(file_name, smiles_char_dict, open_fn, extract_fn) -> List[str]:
+def get_raw_smiles(file_name, smiles_char_dict, open_fn, extract_fn) ->  List[str]:
     """
     Extracts the raw smiles from an input file.
     open_fn will open the file to iterate over it (e.g. use open_fn=open or open_fn=filegzip.open)

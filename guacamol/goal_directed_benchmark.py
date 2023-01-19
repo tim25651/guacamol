@@ -18,7 +18,7 @@ class GoalDirectedBenchmarkResult:
     Contains the results of a goal-directed benchmark.
     """
 
-    def __init__(self, benchmark_name: str, score: float, optimized_molecules: List[Tuple[str, float]],
+    def __init__(self, benchmark_name: str, score: float, optimized_molecules:  List[ Tuple[str, float]],
                  execution_time: float, number_scoring_function_calls: int, metadata: Dict[str, Any]) -> None:
         """
         Args:
@@ -44,7 +44,7 @@ class GoalDirectedBenchmark:
 
     def __init__(self, name: str, objective: ScoringFunction,
                  contribution_specification: ScoreContributionSpecification,
-                 starting_population: Optional[List[str]] = None) -> None:
+                 starting_population: Optional[ List[str]] = None) -> None:
         """
         Args:
             name: Benchmark name

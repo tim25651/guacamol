@@ -9,7 +9,7 @@ from guacamol.utils.chemistry import canonicalize_list, is_valid, calculate_pc_d
 from guacamol.distribution_matching_generator import DistributionMatchingGenerator
 from guacamol.utils.data import get_random_subset
 from guacamol.utils.sampling_helpers import sample_valid_molecules, sample_unique_molecules
-
+from guacamol.utils.parallelize import mp
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
@@ -72,7 +72,8 @@ class ValidityBenchmark(DistributionLearningBenchmark):
         if len(molecules) != self.number_samples:
             raise Exception('The model did not generate the correct number of molecules')
 
-        number_valid = sum(1 if is_valid(smiles) else 0 for smiles in molecules)
+        are_valid = mp(is_valid, molecules, n_jobs=-1)
+        number_valid = sum(1 if valid else 0 for valid in are_valid)
         validity_ratio = number_valid / self.number_samples
         metadata = {
             'number_samples': self.number_samples,
@@ -163,7 +164,7 @@ class KLDivBenchmark(DistributionLearningBenchmark):
     Computes the KL divergence between a number of samples and the training set for physchem descriptors
     """
 
-    def __init__(self, number_samples: int, training_set: List[str]) -> None:
+    def __init__(self, number_samples: int, training_set:  List[str]) -> None:
         """
         Args:
             number_samples: number of samples to generate from the model

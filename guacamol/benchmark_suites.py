@@ -1,15 +1,15 @@
 from typing import List
 
 from guacamol.distribution_learning_benchmark import DistributionLearningBenchmark, ValidityBenchmark, \
-    UniquenessBenchmark
+    UniquenessBenchmark, NoveltyBenchmark, KLDivBenchmark
 from guacamol.goal_directed_benchmark import GoalDirectedBenchmark
 from guacamol.scoring_function import ArithmeticMeanScoringFunction
 from guacamol.standard_benchmarks import hard_cobimetinib, similarity, logP_benchmark, cns_mpo, \
-    qed_benchmark, median_camphor_menthol, novelty_benchmark, isomers_c11h24, isomers_c7h8n2o2, isomers_c9h10n2o2pf2cl, \
-    frechet_benchmark, tpsa_benchmark, hard_osimertinib, hard_fexofenadine, weird_physchem, start_pop_ranolazine, \
-    kldiv_benchmark, perindopril_rings, amlodipine_rings, sitagliptin_replacement, zaleplon_with_other_formula, valsartan_smarts, \
+    qed_benchmark, median_camphor_menthol, isomers_c11h24, isomers_c7h8n2o2, isomers_c9h10n2o2pf2cl, \
+        tpsa_benchmark, hard_osimertinib, hard_fexofenadine, weird_physchem, start_pop_ranolazine, \
+    perindopril_rings, amlodipine_rings, sitagliptin_replacement, zaleplon_with_other_formula, valsartan_smarts, \
     median_tadalafil_sildenafil, decoration_hop, scaffold_hop, ranolazine_mpo, pioglitazone_mpo
-
+from guacamol.frechet_benchmark import FrechetBenchmark
 
 def goal_directed_benchmark_suite(version_name: str) -> List[GoalDirectedBenchmark]:
     if version_name == 'v1':
@@ -140,6 +140,9 @@ def goal_directed_suite_trivial() -> List[GoalDirectedBenchmark]:
         pioglitazone_mpo(),
     ]
 
+def init_training_set(training_set_file: str) -> List[str]:
+    with open(training_set_file, 'r') as f:
+        return [line.strip() for line in f.readlines()]
 
 def distribution_learning_suite_v1(chembl_file_path: str, number_samples: int = 10000) -> \
         List[DistributionLearningBenchmark]:
@@ -152,10 +155,13 @@ def distribution_learning_suite_v1(chembl_file_path: str, number_samples: int = 
     Returns:
         List of benchmarks, version 1
     """
+    
+        
+    training_set = init_training_set(chembl_file_path)
     return [
         ValidityBenchmark(number_samples=number_samples),
         UniquenessBenchmark(number_samples=number_samples),
-        novelty_benchmark(training_set_file=chembl_file_path, number_samples=number_samples),
-        kldiv_benchmark(training_set_file=chembl_file_path, number_samples=number_samples),
-        frechet_benchmark(training_set_file=chembl_file_path, number_samples=number_samples)
+        NoveltyBenchmark(number_samples=number_samples, training_set=training_set),
+        KLDivBenchmark(number_samples=number_samples, training_set=training_set),
+        FrechetBenchmark(training_set=training_set, sample_size=number_samples)
     ]

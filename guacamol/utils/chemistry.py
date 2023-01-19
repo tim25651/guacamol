@@ -11,7 +11,8 @@ from scipy import histogram
 from scipy.stats import entropy, gaussian_kde
 
 from guacamol.utils.data import remove_duplicates
-
+from guacamol.utils.parallelize import mp
+from functools import partial
 # Mute RDKit logger
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
@@ -56,8 +57,21 @@ def canonicalize(smiles: str, include_stereocenters=True) -> Optional[str]:
     else:
         return None
 
+def canonicalize_without_stereocenters(smiles: str) -> Optional[str]:
+    """
+    Canonicalize the SMILES strings with RDKit without keeping the stereochemical information.
 
-def canonicalize_list(smiles_list: Iterable[str], include_stereocenters=True) -> List[str]:
+    The algorithm is detailed under https://pubs.acs.org/doi/full/10.1021/acs.jcim.5b00543
+
+    Args:
+        smiles: SMILES string to canonicalize
+
+    Returns:
+        Canonicalized SMILES string, None if the molecule is invalid.
+    """
+    return canonicalize(smiles, include_stereocenters=False)
+    
+def canonicalize_list(smiles_list: Iterable[str], include_stereocenters=True) ->  List[str]:
     """
     Canonicalize a list of smiles. Filters out repetitions and removes corrupted molecules.
 
@@ -68,9 +82,12 @@ def canonicalize_list(smiles_list: Iterable[str], include_stereocenters=True) ->
     Returns:
         The canonicalized and filtered input smiles.
     """
-
-    canonicalized_smiles = [canonicalize(smiles, include_stereocenters) for smiles in smiles_list]
-
+    
+    if include_stereocenters:
+        canonicalized_smiles = mp(canonicalize, smiles_list, n_jobs=-1)
+    else:
+        canonicalized_smiles = mp(canonicalize_without_stereocenters, smiles_list, n_jobs=-1)
+        
     # Remove None elements
     canonicalized_smiles = [s for s in canonicalized_smiles if s is not None]
 
@@ -235,7 +252,7 @@ def calculate_internal_pairwise_similarities(smiles_list: Collection[str]) -> np
     return similarities
 
 
-def calculate_pairwise_similarities(smiles_list1: List[str], smiles_list2: List[str]) -> np.ndarray:
+def calculate_pairwise_similarities(smiles_list1:  List[str], smiles_list2:  List[str]) -> np.ndarray:
     """
     Computes the pairwise ECFP4 tanimoto similarity of the two smiles containers.
 
@@ -338,18 +355,19 @@ def discrete_kldiv(X_baseline: np.ndarray, X_sampled: np.ndarray) -> float:
     return entropy(P, Q)
 
 
-def calculate_pc_descriptors(smiles: Iterable[str], pc_descriptors: List[str]) -> np.ndarray:
+def calculate_pc_descriptors(smiles: Iterable[str], pc_descriptors:  List[str]) -> np.ndarray:
+    descriptors = mp(partial(_calculate_pc_descriptors, pc_descriptors=pc_descriptors), smiles, n_jobs=-1)
+    
+    
     output = []
-
-    for i in smiles:
-        d = _calculate_pc_descriptors(i, pc_descriptors)
+    for d in descriptors:
         if d is not None:
             output.append(d)
 
     return np.array(output)
 
 
-def _calculate_pc_descriptors(smiles: str, pc_descriptors: List[str]) -> Optional[np.ndarray]:
+def _calculate_pc_descriptors(smiles: str, pc_descriptors:  List[str]) -> Optional[np.ndarray]:
     calc = MoleculeDescriptors.MolecularDescriptorCalculator(pc_descriptors)
 
     mol = Chem.MolFromSmiles(smiles)
@@ -365,7 +383,7 @@ def _calculate_pc_descriptors(smiles: str, pc_descriptors: List[str]) -> Optiona
     return _fp
 
 
-def parse_molecular_formula(formula: str) -> List[Tuple[str, int]]:
+def parse_molecular_formula(formula: str) ->  List[ Tuple[str, int]]:
     """
     Parse a molecular formulat to get the element types and counts.
 
