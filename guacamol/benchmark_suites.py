@@ -33,7 +33,7 @@ def distribution_learning_benchmark_suite(chembl_file_path: str,
         version_name: benchmark version
 
     Returns:
-        List of benchmaks
+       List of benchmaks
     """
 
     # For distribution-learning, v1 and v2 are identical
@@ -145,7 +145,7 @@ def init_training_set(training_set_file: str) -> List[str]:
         return [line.strip() for line in f.readlines()]
 
 def distribution_learning_suite_v1(chembl_file_path: str, number_samples: int = 10000) -> \
-        List[DistributionLearningBenchmark]:
+       List[DistributionLearningBenchmark]:
     """
     Suite of distribution learning benchmarks, v1.
 
@@ -153,7 +153,7 @@ def distribution_learning_suite_v1(chembl_file_path: str, number_samples: int = 
         chembl_file_path: path to the file with the reference ChEMBL molecules
 
     Returns:
-        List of benchmarks, version 1
+       List of benchmarks, version 1
     """
     
         

@@ -71,7 +71,7 @@ def canonicalize_without_stereocenters(smiles: str) -> Optional[str]:
     """
     return canonicalize(smiles, include_stereocenters=False)
     
-def canonicalize_list(smiles_list: Iterable[str], include_stereocenters=True) ->  List[str]:
+def canonicalize_list(smiles_list: Iterable[str], include_stereocenters=True) -> List[str]:
     """
     Canonicalize a list of smiles. Filters out repetitions and removes corrupted molecules.
 
@@ -182,7 +182,7 @@ def filter_and_canonicalize(smiles: str, holdout_set, holdout_fps, neutralizatio
         include_stereocenters: whether to keep stereocenters during canonicalization
 
     Returns:
-        list with canonical smiles as a list with one element, or a an empty list. This is to perform a flatmap:
+       List with canonical smiles as a list with one element, or a an empty list. This is to perform a flatmap:
     """
     try:
         # Drop out if too long
@@ -252,7 +252,7 @@ def calculate_internal_pairwise_similarities(smiles_list: Collection[str]) -> np
     return similarities
 
 
-def calculate_pairwise_similarities(smiles_list1:  List[str], smiles_list2:  List[str]) -> np.ndarray:
+def calculate_pairwise_similarities(smiles_list1: List[str], smiles_list2: List[str]) -> np.ndarray:
     """
     Computes the pairwise ECFP4 tanimoto similarity of the two smiles containers.
 
@@ -355,7 +355,7 @@ def discrete_kldiv(X_baseline: np.ndarray, X_sampled: np.ndarray) -> float:
     return entropy(P, Q)
 
 
-def calculate_pc_descriptors(smiles: Iterable[str], pc_descriptors:  List[str]) -> np.ndarray:
+def calculate_pc_descriptors(smiles: Iterable[str], pc_descriptors: List[str]) -> np.ndarray:
     descriptors = mp(partial(_calculate_pc_descriptors, pc_descriptors=pc_descriptors), smiles, n_jobs=-1)
     
     
@@ -367,7 +367,7 @@ def calculate_pc_descriptors(smiles: Iterable[str], pc_descriptors:  List[str]) 
     return np.array(output)
 
 
-def _calculate_pc_descriptors(smiles: str, pc_descriptors:  List[str]) -> Optional[np.ndarray]:
+def _calculate_pc_descriptors(smiles: str, pc_descriptors: List[str]) -> Optional[np.ndarray]:
     calc = MoleculeDescriptors.MolecularDescriptorCalculator(pc_descriptors)
 
     mol = Chem.MolFromSmiles(smiles)
@@ -383,7 +383,7 @@ def _calculate_pc_descriptors(smiles: str, pc_descriptors:  List[str]) -> Option
     return _fp
 
 
-def parse_molecular_formula(formula: str) ->  List[ Tuple[str, int]]:
+def parse_molecular_formula(formula: str) -> List[Tuple[str, int]]:
     """
     Parse a molecular formulat to get the element types and counts.
 

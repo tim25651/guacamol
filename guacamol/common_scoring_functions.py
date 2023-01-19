@@ -110,7 +110,7 @@ class IsomerScoringFunction(MoleculewiseScoringFunction):
         self.scoring_functions = self.determine_scoring_functions(molecular_formula)
 
     @staticmethod
-    def determine_mean_function(mean_function: str) -> Callable[[ List[float]], float]:
+    def determine_mean_function(mean_function: str) -> Callable[[List[float]], float]:
         if mean_function == 'arithmetic':
             return arithmetic_mean
         if mean_function == 'geometric':
@@ -118,10 +118,10 @@ class IsomerScoringFunction(MoleculewiseScoringFunction):
         raise ValueError(f'Invalid mean function: "{mean_function}"')
 
     @staticmethod
-    def determine_scoring_functions(molecular_formula: str) ->  List[RdkitScoringFunction]:
+    def determine_scoring_functions(molecular_formula: str) -> List[RdkitScoringFunction]:
         element_occurrences = parse_molecular_formula(molecular_formula)
 
-        total_number_atoms = sum(element_ Tuple[1] for element_tuple in element_occurrences)
+        total_number_atoms = sum(element_tuple[1] for element_tuple in element_occurrences)
 
         # scoring functions for each element
         functions = [RdkitScoringFunction(descriptor=AtomCounter(element),

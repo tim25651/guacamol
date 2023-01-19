@@ -51,7 +51,7 @@ class ScoringFunction:
         raise NotImplementedError
 
     @abstractmethod
-    def score_list(self, smiles_list:  List[str]) ->  List[float]:
+    def score_list(self, smiles_list: List[str]) -> List[float]:
         """
         Score a list of smiles.
 
@@ -91,7 +91,7 @@ class MoleculewiseScoringFunction(ScoringFunction):
             logger.warning(f'Unknown exception thrown during scoring of {smiles}')
             return self.corrupt_score
 
-    def score_list(self, smiles_list:  List[str]) ->  List[float]:
+    def score_list(self, smiles_list: List[str]) -> List[float]:
         return [self.score(smiles) for smiles in smiles_list]
 
     @abstractmethod
@@ -124,7 +124,7 @@ class BatchScoringFunction(ScoringFunction):
     def score(self, smiles: str) -> float:
         return self.score_list([smiles])[0]
 
-    def score_list(self, smiles_list:  List[str]) ->  List[float]:
+    def score_list(self, smiles_list: List[str]) -> List[float]:
         raw_scores = self.raw_score_list(smiles_list)
 
         scores = [self.corrupt_score if raw_score is None
@@ -134,7 +134,7 @@ class BatchScoringFunction(ScoringFunction):
         return scores
 
     @abstractmethod
-    def raw_score_list(self, smiles_list:  List[str]) ->  List[float]:
+    def raw_score_list(self, smiles_list: List[str]) -> List[float]:
         """
         Calculate the objective score before application of the modifier for a batch of molecules.
 
@@ -179,7 +179,7 @@ class ArithmeticMeanScoringFunction(BatchScoringFunction):
     Scoring function that combines multiple scoring functions linearly.
     """
 
-    def __init__(self, scoring_functions:  List[ScoringFunction], weights=None) -> None:
+    def __init__(self, scoring_functions: List[ScoringFunction], weights=None) -> None:
         """
         Args:
             scoring_functions: scoring functions to combine
@@ -193,7 +193,7 @@ class ArithmeticMeanScoringFunction(BatchScoringFunction):
         self.weights = np.ones(number_scoring_functions) if weights is None else weights
         assert number_scoring_functions == len(self.weights)
 
-    def raw_score_list(self, smiles_list:  List[str]) ->  List[float]:
+    def raw_score_list(self, smiles_list: List[str]) -> List[float]:
         scores = []
 
         for function, weight in zip(self.scoring_functions, self.weights):
@@ -210,7 +210,7 @@ class GeometricMeanScoringFunction(MoleculewiseScoringFunction):
     Scoring function that combines multiple scoring functions multiplicatively.
     """
 
-    def __init__(self, scoring_functions:  List[ScoringFunction]) -> None:
+    def __init__(self, scoring_functions: List[ScoringFunction]) -> None:
         """
         Args:
             scoring_functions: scoring functions to combine

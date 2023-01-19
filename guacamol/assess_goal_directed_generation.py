@@ -44,8 +44,8 @@ def assess_goal_directed_generation(goal_directed_molecule_generator: GoalDirect
 
 
 def _evaluate_goal_directed_benchmarks(goal_directed_molecule_generator: GoalDirectedGenerator,
-                                       benchmarks:  List[GoalDirectedBenchmark]
-                                       ) ->  List[GoalDirectedBenchmarkResult]:
+                                       benchmarks: List[GoalDirectedBenchmark]
+                                       ) -> List[GoalDirectedBenchmarkResult]:
     """
     Evaluate a model with the given benchmarks.
     Should not be called directly except for testing purposes.

@@ -164,7 +164,7 @@ class KLDivBenchmark(DistributionLearningBenchmark):
     Computes the KL divergence between a number of samples and the training set for physchem descriptors
     """
 
-    def __init__(self, number_samples: int, training_set:  List[str]) -> None:
+    def __init__(self, number_samples: int, training_set: List[str]) -> None:
         """
         Args:
             number_samples: number of samples to generate from the model

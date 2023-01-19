@@ -14,7 +14,7 @@ def remove_duplicates(list_with_duplicates):
     For duplicates, the first occurrence is kept and the later occurrences are ignored.
 
     Args:
-        list_with_duplicates: list that possibly contains duplicates
+       List_with_duplicates: list that possibly contains duplicates
 
     Returns:
         A list with no duplicates.
@@ -30,7 +30,7 @@ def remove_duplicates(list_with_duplicates):
     return unique_list
 
 
-def get_random_subset(dataset:  List[Any], subset_size: int, seed: Optional[int] = None) ->  List[Any]:
+def get_random_subset(dataset: List[Any], subset_size: int, seed: Optional[int] = None) -> List[Any]:
     """
     Get a random subset of some dataset.
 

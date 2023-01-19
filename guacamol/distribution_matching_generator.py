@@ -8,7 +8,7 @@ class DistributionMatchingGenerator(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def generate(self, number_samples: int) ->  List[str]:
+    def generate(self, number_samples: int) -> List[str]:
         """
         Samples SMILES strings from a molecule generator.
 

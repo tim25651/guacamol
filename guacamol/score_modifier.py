@@ -29,7 +29,7 @@ class ChainedModifier(ScoreModifier):
         score = modifier3(modifier2(modifier1(raw_score)))
     """
 
-    def __init__(self, modifiers:  List[ScoreModifier]) -> None:
+    def __init__(self, modifiers: List[ScoreModifier]) -> None:
         """
         Args:
             modifiers: modifiers to call in sequence.
